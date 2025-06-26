@@ -39,19 +39,19 @@ jobs:
         tag: ${{ github.event.release.tag_name }}
         body: ${{ github.event.release.body }}
         
-    - name: Close Milestone with same name
-      id: close_milestone
-      uses: adlerhsieh/prepare-release@0.1.2
-      env: 
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        REPO_OWNER: 'Talaren'
-        REPO: 'FoundryVTT-PlayerListStatus'
-        IGNORE_MILESTONE_NOT_FOUND: true
+    # - name: Close Milestone with same name
+    #   id: close_milestone
+    #   uses: adlerhsieh/prepare-release@0.1.2
+    #   env: 
+    #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    #     REPO_OWNER: 'Talaren'
+    #     REPO: 'FoundryVTT-PlayerListStatus'
+    #     IGNORE_MILESTONE_NOT_FOUND: true
 
-    - name: Publish Module to FoundryVTT Website
-      id: publish-to-foundry-website
-      uses: cs96and/FoundryVTT-release-package@v1.0.2
-      with:
-        package-token: ${{ secrets.PACKAGE_TOKEN }}
-        manifest-url: https://github.com/${{github.repository}}/releases/download/${{github.event.release.tag_name}}/module.json
-        notes-url: https://github.com/${{github.repository}}/releases/tag/${{github.event.release.tag_name}}
+    # - name: Publish Module to FoundryVTT Website
+    #   id: publish-to-foundry-website
+    #   uses: cs96and/FoundryVTT-release-package@v1.0.2
+    #   with:
+    #     package-token: ${{ secrets.PACKAGE_TOKEN }}
+    #     manifest-url: https://github.com/${{github.repository}}/releases/download/${{github.event.release.tag_name}}/module.json
+    #     notes-url: https://github.com/${{github.repository}}/releases/tag/${{github.event.release.tag_name}}

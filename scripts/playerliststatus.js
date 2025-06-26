@@ -12,12 +12,12 @@ Hooks.once("init", () => {
 Hooks.once('ready', () => {
     Game.prototype.playerListStatus = new PlayerListStatus(playerListRegistry);
 
-    Hooks.on('renderPlayerList', (foundry, html, data) => {
-        game.playerListStatus.render(foundry, html, data);
-    });
+     Hooks.on('renderPlayers', (foundry, html, data) => {
+         game.playerListStatus.render(foundry, html, data);
+     });
 
     Hooks.on('updateUser', (user, props, mods, id) => {
-        game.users.apps.find((app)=>app instanceof PlayerList)?.render();
+        game.users.apps.find((app)=>app instanceof Players)?.render();
     })
 
     Hooks.callAll("playerListStatusReady", game.playerListStatus);

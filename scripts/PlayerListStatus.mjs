@@ -165,33 +165,42 @@ export default class PlayerListStatus {
     }
 
     render(foundry, html, options) {
-        let root = getComputedStyle(document.querySelector(":root"));
-        let width = parseInt(root.getPropertyValue("--players-width").replace("px", ""));
+        let root = getComputedStyle(document.getElementById("players-active"));
+        let width = parseInt(root.getPropertyValue("width").replace("px", ""));
         let maxWidth = 0;
-        for (let user of options.users) {
-            let userid = user._id;
-            let buttonPlacement = html.find(`[data-user-id="${userid}"]`);
-            let children = buttonPlacement.children();
+        for (let user of options.active) {
+            let userid = user.id;
+            let buttonPlacement = html.querySelector(`[data-user-id="${userid}"]`);
+            let children = buttonPlacement.children;
             let playerName = undefined;
             let playerActive = undefined;
+
+            
             for (let child of children) {
                 if (child.classList.contains("player-name")) {
                     playerName = child;
-                } else if (child.classList.contains("player-active")) {
-                    playerActive = child;
-                } else if (child.classList.contains("player-inactive")) {
-                    playerActive = child;
-                }
+                } 
             }
-            if (typeof playerName === 'undefined' || typeof playerActive === 'undefined') {
+
+            
+            if (typeof playerName === 'undefined') {
                 continue;
             }
-            let flag
-            if (parseInt(game.version) === 9) {
-                flag = user.data.flags["playerListStatus"];
-            } else {
-                flag = user.flags["playerListStatus"];
+
+            //get the parent element of playerName
+            playerActive = playerName.parentElement;
+            
+
+            if (typeof playerActive === 'undefined') {
+                continue;
             }
+
+          
+            //userdata is no longer being passed in the event, so go get it
+            let userObject = game.users.get(userid);
+
+            let flag = userObject.flags["playerListStatus"];
+            
 
             if (typeof flag === 'undefined') {
                 continue;
@@ -202,28 +211,28 @@ export default class PlayerListStatus {
             if (beforeOnlineStatus !== undefined) {
                 for (let [key, value] of new Map(Object.entries(beforeOnlineStatus))) {
                     maxWidth = this.#updateMaxWidth(maxWidth, value);
-                    this.#insertValue(buttonPlacement[0], playerActive, value, key);
+                    this.#insertValue(buttonPlacement, playerActive, value, key);
                 }
             }
             if (beforePlayername !== undefined) {
                 for (let [key, value] of new Map(Object.entries(beforePlayername))) {
                     maxWidth = this.#updateMaxWidth(maxWidth, value);
-                    this.#insertValue(buttonPlacement[0], playerName, value, key);
+                    this.#insertValue(buttonPlacement, playerName, value, key);
                 }
             }
             if (afterPlayername !== undefined) {
                 for (let [key, value] of new Map(Object.entries(afterPlayername))) {
                     maxWidth = this.#updateMaxWidth(maxWidth, value);
-                    this.#insertValue(buttonPlacement[0], null, value, key);
+                    this.#insertValue(buttonPlacement, null, value, key);
                 }
             }
             if (maxWidth > 0) {
-                html[0].style.width = (width + maxWidth) + "px";
+                html.style.width = (width + maxWidth) + "px";
             }
 
         }
         if (maxWidth > 0) {
-            html[0].style.width = (width + maxWidth) + "px";
+            html.style.width = (width + maxWidth) + "px";
         }
     }
 
